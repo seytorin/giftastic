@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" type="text/css" href="..\giftastic\style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <title>Choose a Theme</title>
+</head>
+<body>
+
+<div class="container">
+
+  <div class="row">
+	   <div class="col-lg-12">
+        <div id="topic"></div>
+     </div> 
+  </div>
+  
+         
+      <div class="row" id="gifPlacement">
+              <div class="col-lg-8" id="addedGifs"></div>
+          <div class="col-lg-4 submitTopic">
+              <label for="topic-input">Add a topic</label>
+              <input type="text" id="topic-input"><br>
+              <input id="add-topic" type="submit" value="Submit" class="btn btn-primary">
+          </div>
+      </div>
+
+  </div>         
+ 
+ 
+  
+    
+  </div>
+
+</div>
+	
+
+	
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script type="text/javascript">
+  	var topic = ["bruce lee", "jackie chan", "sonny chiba", "brandon lee", "shannon lee", "ernie reyes", "sammo hung", "biao yuen"];
+  	var gifOutput;
+  	var topicInput;
+    var buttonVal;
+
+  	for(var i = 0;i<topic.length;i++){
+  		
+  		gifOutput = $("<button type='button' class='btn btn-primary' style='margin:10px' data-topic='" + topic[i] + "'>" + topic[i] + "</button>");
+    	gifOutput.appendTo($("#topic"));
+
+  		
+  	}
+
+      let renderButtons = () =>{
+      	 topicInput = $("#topic-input").val().trim();
+
+        // Adding movie from the textbox to our array
+        topic.push(topicInput);
+      	addedButton = $("<button type='button' class='btn btn-primary' style='margin:10px' data-topic='" + topicInput + "'>" + topicInput + "</button>");
+    	addedButton.appendTo($("#topic"));
+
+
+  }
+  $("#add-topic").on("click", function(){
+  	renderButtons();
+  
+  	
+
+  });
+  
+  	  $(document).on("click", "button", function() {
+      // In this case, the "this" keyword refers to the button that was clicked
+      var searchParam = $(this).attr("data-topic");
+  	
+      
+      
+      //you can use more than one attribute here if needed
+      var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        searchParam + "&api_key=dc6zaTOxFJmzC&limit=10";
+		
+		
+
+      $.ajax({
+          url: queryURL,
+          method: "GET"
+        })
+      //run the data from the api after .done
+        .done(function(response) {
+          var results = response.data;
+          // console.log(response.data);
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div class='item'>");
+
+            var rating = results[i].rating;
+            if(rating!="r" || rating != "pg"){
+            var p = $("<p>").text("Rating: " + rating);
+          }
+
+            var topicImage = $("<img>");
+            
+            let imageStill = () =>{
+            topicImage.attr("src", results[i].images.fixed_height_small_still.url);
+            }
+
+              imageStill();
+
+            let imageMove = () =>{
+            topicImage.empty();
+            topicImage = $("<img>");
+            topicImage.attr("src", results[i].images.fixed_height.url);
+            }
+          
+
+
+            topicImage.on( "click", function() {
+              imageMove();
+
+            });
+
+
+
+            gifDiv.prepend(p);
+            gifDiv.prepend(topicImage);
+
+            $("#addedGifs").prepend(gifDiv);
+          }
+        });
+        	console.log(searchParam);
+    });
+
+
+
+
+
+
+
+
+
+  </script>
+</body>

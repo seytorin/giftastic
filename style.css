@@ -1,0 +1,44 @@
+body{
+	background-image: url("file://C:/Users/Kimdenning/Documents/giftastic/bruce.jpg");
+}
+
+button{ 
+	padding:5px;
+	margin:0px;
+ }
+#topic{
+	
+	
+	width:600px;
+	position:relative;
+}
+
+#container{
+	height:1000px;
+}
+
+.addedGifs{
+	
+}
+
+.item{
+	float:left;
+	margin:20px;
+	
+}
+img{
+	margin:10px 20px 20px 20px;
+	border: 20px black;
+}
+
+p{
+	color:white;
+	text-shadow:1px 1px black;
+	font-size:large;
+}
+
+#submitTopic{
+	position:absolute;
+	float:right;
+	margin:10px 0px;
+}
