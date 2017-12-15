@@ -5,7 +5,7 @@
   <link rel="stylesheet" type="text/css" href="..\giftastic\style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>    
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <meta charset="utf-8">
   <title>Choose a Theme</title>
@@ -21,10 +21,10 @@
   </div>
   
          
-      <div class="row" id="gifPlacement">
+      <div class="row" >
               <div class="col-lg-8" id="addedGifs"></div>
           <div class="col-lg-4 submitTopic">
-              <label for="topic-input">Add a topic</label>
+              <label for="topic-input" style="color:white">Add a topic</label>
               <input type="text" id="topic-input"><br>
               <input id="add-topic" type="submit" value="Submit" class="btn btn-primary">
           </div>
@@ -44,10 +44,15 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script type="text/javascript">
+    $(document).ready(function (){
+
+    
   	var topic = ["bruce lee", "jackie chan", "sonny chiba", "brandon lee", "shannon lee", "ernie reyes", "sammo hung", "biao yuen"];
   	var gifOutput;
   	var topicInput;
     var buttonVal;
+    var im1;
+    var im2;
 
   	for(var i = 0;i<topic.length;i++){
   		
@@ -60,7 +65,7 @@
       let renderButtons = () =>{
       	 topicInput = $("#topic-input").val().trim();
 
-        // Adding movie from the textbox to our array
+        // Adding button by pusing to topic array
         topic.push(topicInput);
       	addedButton = $("<button type='button' class='btn btn-primary' style='margin:10px' data-topic='" + topicInput + "'>" + topicInput + "</button>");
     	addedButton.appendTo($("#topic"));
@@ -80,7 +85,7 @@
   	
       
       
-      //you can use more than one attribute here if needed
+     
       var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
         searchParam + "&api_key=dc6zaTOxFJmzC&limit=10";
 		
@@ -103,25 +108,26 @@
           }
 
             var topicImage = $("<img>");
+            topicImage.addClass("images");
+
+            im1 = results[i].images.fixed_height_small_still.url;
+            im2 = results[i].images.fixed_height_small.url;
             
+
             let imageStill = () =>{
             topicImage.attr("src", results[i].images.fixed_height_small_still.url);
             }
 
               imageStill();
 
-            let imageMove = () =>{
+            /*let imageMove = () =>{
             topicImage.empty();
             topicImage = $("<img>");
             topicImage.attr("src", results[i].images.fixed_height.url);
-            }
+            }*/
           
 
 
-            topicImage.on( "click", function() {
-              imageMove();
-
-            });
 
 
 
@@ -131,12 +137,33 @@
             $("#addedGifs").prepend(gifDiv);
           }
         });
+
+
+
         	console.log(searchParam);
+
+$(document).on("click", ".images", function(event) {
+  event.preventDefault();
+  console.log("this");
+           console.log($(this).attr('src'));
+           $.each($(this).children("img"), function(i, e){
+            console.log(e);
+           })
+            
+            if($(this).children("img").attr("src") === im2){
+              $(this).children("item").attr("src", im1); 
+              console.log(this);
+            }
+            else if($(this).children("item").attr("src") === im1){
+              $(this).children("item").attr("src", im2);
+              console.log(this);
+            }
+
+         });
+
     });
 
-
-
-
+});
 
 
 
